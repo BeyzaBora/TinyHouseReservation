@@ -1,0 +1,38 @@
+﻿@model TinyHouseReservations.Models.Ev
+
+@{
+    ViewData["Title"] = "Yeni İlan Ekle";
+}
+
+<h2>Yeni İlan Ekle</h2>
+
+<form asp-action="YeniIlan" method="post">
+    <div class="form-group">
+        <label>Başlık:</label>
+        <input asp-for="Baslik" class="form-control" required />
+    </div>
+    <div class="form-group">
+        <label>Açıklama:</label>
+        <textarea asp-for="Aciklama" class="form-control" required></textarea>
+    </div>
+    <div class="form-group">
+        <label>Konum:</label> <!-- Konum alanı eklendi -->
+        <input asp-for="Konum" class="form-control" required />
+    </div>
+    <div class="form-group">
+        <label>Fiyat:</label>
+        <input asp-for="Fiyat" type="number" step="0.01" class="form-control" required />
+    </div>
+    <div class="form-group">
+        <label>Durum:</label>
+        <select asp-for="Durum" class="form-control" required>
+            <option value="true">Aktif</option>
+            <option value="false">Pasif</option>
+        </select>
+    </div>
+    <div class="form-group">
+        <label>Görsel Yolu:</label>
+        <input asp-for="GorselYolu" class="form-control" required />
+    </div>
+    <button type="submit" class="btn btn-primary">Kaydet</button>
+</form>

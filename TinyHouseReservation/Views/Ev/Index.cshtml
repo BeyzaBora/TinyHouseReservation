@@ -1,8 +1,40 @@
-﻿@{
-    ViewData["Title"] = "Ev Sahibi Paneli";
-}
+﻿@model List<TinyHouseReservations.Models.Ev>
 
-<h2>Ev Sahibi Paneline Hoş Geldiniz</h2>
-<p>Bu sayfa ev sahibi kullanıcılar içindir.</p>
+<h2>Ev Sahibi İlanları</h2>
 
+<table class="table">
+    <thead>
+        <tr>
+            <th>Başlık</th>
+            <th>Açıklama</th>
+            <th>Fiyat</th>
+            <th>Durum</th>
+            <th>İşlemler</th>
+        </tr>
+    </thead>
+    <tbody>
+        @if (Model != null && Model.Any())  // Model null değilse ve içinde veri varsa
+        {
+            @foreach (var ev in Model)
+            {
+                <tr>
+                    <td>@ev.Baslik</td>
+                    <td>@ev.Aciklama</td>
+                    <td>@ev.Fiyat</td>
+                    <td>@(ev.Durum ? "Aktif" : "Pasif")</td>
+                    <td>
+                        <a href="@Url.Action("IlanGuncelle", "EvSahibi", new { id = ev.EvID })" class="btn btn-warning">Düzenle</a>
+                        <a href="@Url.Action("IlanSil", "EvSahibi", new { id = ev.EvID })" class="btn btn-danger">Sil</a>
+                    </td>
+                </tr>
+            }
+        }
+        else
+        {
+            <p>İlanlar bulunamadı.</p>
+            // Model boşsa ya da null ise
+        }
+    </tbody>
+</table>
 
+<a href="@Url.Action("YeniIlan", "EvSahibi")" class="btn btn-success">Yeni İlan Ekle</a>

@@ -1,6 +1,6 @@
-using Microsoft.AspNetCore.Mvc;
-using TinyHouseReservations.DataAccess;  // Kullanýcý verisi için repository
-using TinyHouseReservations.Models;     // Kullanýcý modelini kullanabilmek için
+ï»¿using Microsoft.AspNetCore.Mvc;
+using TinyHouseReservations.DataAccess;  // KullanÄ±cÄ± verisi iÃ§in repository
+using TinyHouseReservations.Models;     // KullanÄ±cÄ± modelini kullanabilmek iÃ§in
 
 namespace TinyHouseReservations.Controllers
 {
@@ -10,39 +10,53 @@ namespace TinyHouseReservations.Controllers
 
         public HomeController()
         {
-            _repo = new KullaniciRepository(); // Repository'i baþlatýyoruz
+            _repo = new KullaniciRepository(); // Repository'i baÅŸlatÄ±yoruz
         }
 
         public IActionResult Index()
         {
-            // Veritabanýndaki tüm kullanýcýlarý alýyoruz
+            // VeritabanÄ±ndaki tÃ¼m kullanÄ±cÄ±larÄ± alÄ±yoruz
             var kullanicilar = _repo.GetAll();
-            return View(kullanicilar); // Kullanýcý listesini view'a gönderiyoruz
+            return View(kullanicilar); // KullanÄ±cÄ± listesini view'a gÃ¶nderiyoruz
         }
 
-        // Login sayfasýna yönlendiren metod
+        // Login sayfasÄ±na yÃ¶nlendiren metod
         public IActionResult Login()
         {
             return View();
         }
 
-        // Login iþlemini gerçekleþtiren metod
         [HttpPost]
         public IActionResult Login(string email, string sifre)
         {
-            // Girilen email ve þifreyi kontrol ediyoruz
             var kullanici = _repo.GirisYap(email, sifre);
 
             if (kullanici != null)
             {
-                // Kullanýcý giriþi baþarýlýysa, veriyi session'a kaydediyoruz
+                Console.WriteLine("GiriÅŸ BaÅŸarÄ±lÄ±: " + kullanici.Email + " - RolID: " + kullanici.RolID);
+
                 HttpContext.Session.SetInt32("KullaniciID", kullanici.KullaniciID);
-                return RedirectToAction("Index");
+                HttpContext.Session.SetInt32("RolID", kullanici.RolID);
+
+                if (kullanici.RolID == 2) // Ev Sahibi
+                {
+                    HttpContext.Session.SetInt32("EvSahibiID", kullanici.KullaniciID);
+                    Console.WriteLine("EvSahibiID yazÄ±ldÄ±: " + kullanici.KullaniciID);
+                    return RedirectToAction("Index", "EvSahibi");
+                }
+                else if (kullanici.RolID == 1)  // Admin
+                {
+                    return RedirectToAction("Index", "Admin");
+                }
+                else if (kullanici.RolID == 3)  // KiracÄ±
+                {
+                    return RedirectToAction("Index", "Kiraci");
+                }
             }
 
-            // Hata mesajý
-            ViewBag.Hata = "Geçersiz e-posta veya þifre.";
+            ViewBag.Hata = "GeÃ§ersiz e-posta veya ÅŸifre.";
             return View();
         }
+
     }
 }

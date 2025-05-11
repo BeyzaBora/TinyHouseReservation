@@ -9,7 +9,7 @@ namespace TinyHouseReservations.DataAccess
         public DatabaseHelper()
         {
             // Buraya kendi SQL Server bağlantını yaz
-            _connectionString = "Server=BEYZA;Database=TinyHouseDB;Trusted_Connection=True;TrustServerCertificate=True;";
+            _connectionString = "Server=CEREN\\SQLEXPRESS;Database=TinyHouseDb;Trusted_Connection=True;TrustServerCertificate=True;";
         }
 
         public SqlConnection GetConnection()
